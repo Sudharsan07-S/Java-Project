@@ -1,0 +1,153 @@
+import java.util.*;
+
+public class Main {
+
+    // Inner class for Job Application
+    static class JobApplication {
+        int id;
+        String company;
+        String role;
+        String status;
+
+        JobApplication(int id, String company, String role, String status) {
+            this.id = id;
+            this.company = company;
+            this.role = role;
+            this.status = status;
+        }
+
+        void display() {
+            System.out.println("ID: " + id + 
+                               ", Company: " + company + 
+                               ", Role: " + role + 
+                               ", Status: " + status);
+        }
+    }
+
+    static ArrayList<JobApplication> list = new ArrayList<>();
+    static Scanner sc = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        int choice;
+
+        do {
+            System.out.println("\n===== Job Application Tracker =====");
+            System.out.println("1. Add Application");
+            System.out.println("2. View Applications");
+            System.out.println("3. Update Status");
+            System.out.println("4. Delete Application");
+            System.out.println("5. Search by Company");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice: ");
+
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    addApplication();
+                    break;
+                case 2:
+                    viewApplications();
+                    break;
+                case 3:
+                    updateStatus();
+                    break;
+                case 4:
+                    deleteApplication();
+                    break;
+                case 5:
+                    searchByCompany();
+                    break;
+                case 6:
+                    System.out.println("Thank you! Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice!");
+            }
+
+        } while (choice != 6);
+    }
+
+    static void addApplication() {
+        System.out.print("Enter ID: ");
+        int id = sc.nextInt();
+        sc.nextLine(); // clear buffer
+
+        System.out.print("Enter Company Name: ");
+        String company = sc.nextLine();
+
+        System.out.print("Enter Role: ");
+        String role = sc.nextLine();
+
+        System.out.print("Enter Status (Applied/Interview/Rejected/Selected): ");
+        String status = sc.nextLine();
+
+        list.add(new JobApplication(id, company, role, status));
+        System.out.println("Application Added Successfully!");
+    }
+
+    static void viewApplications() {
+        if (list.isEmpty()) {
+            System.out.println("No applications found.");
+            return;
+        }
+
+        System.out.println("\n--- All Applications ---");
+        for (JobApplication app : list) {
+            app.display();
+        }
+    }
+
+    static void updateStatus() {
+        System.out.print("Enter Application ID: ");
+        int id = sc.nextInt();
+
+        for (JobApplication app : list) {
+            if (app.id == id) {
+                sc.nextLine();
+                System.out.print("Enter New Status: ");
+                String newStatus = sc.nextLine();
+                app.status = newStatus;
+                System.out.println("Status Updated Successfully!");
+                return;
+            }
+        }
+        System.out.println("Application not found.");
+    }
+
+    static void deleteApplication() {
+        System.out.print("Enter Application ID: ");
+        int id = sc.nextInt();
+
+        Iterator<JobApplication> it = list.iterator();
+
+        while (it.hasNext()) {
+            JobApplication app = it.next();
+            if (app.id == id) {
+                it.remove();
+                System.out.println("Application Deleted Successfully!");
+                return;
+            }
+        }
+        System.out.println("Application not found.");
+    }
+
+    static void searchByCompany() {
+        sc.nextLine();
+        System.out.print("Enter Company Name: ");
+        String company = sc.nextLine();
+
+        boolean found = false;
+
+        for (JobApplication app : list) {
+            if (app.company.equalsIgnoreCase(company)) {
+                app.display();
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No applications found for this company.");
+        }
+    }
+}
